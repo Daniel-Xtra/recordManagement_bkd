@@ -18,7 +18,7 @@ export class UserController extends BaseController {
      /**
      * getAllUsers
      */
-    public getAllUsers = async(  per_page: number) => {
+    public getAllUsers = async(per_page:number) => {
         const users = await this._userService.getAllUser(per_page)
         return this.sendResponse(users)
     }

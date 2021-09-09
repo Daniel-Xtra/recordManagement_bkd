@@ -40,4 +40,10 @@ export class ProfileController extends BaseController {
         return this.sendResponse(profile);
     }
 
+    public getPic = async (photo: string) => {
+        const user = await this._profileService.getPics(photo);
+        return this.sendResponse(user);
+    }
+
+
 }

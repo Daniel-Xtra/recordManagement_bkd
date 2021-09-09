@@ -57,28 +57,44 @@ export class ProfileService {
      * @param {Object} photo the uploaded photo with properties
      * @returns {Object} the updated profile data
      */
-    public saveProfilePhoto = async (user: any, photo:any) => {
-        const profileData = {
-            profile_picture_url: photo.path,
-        };
-        const hasProfile: boolean = (await user.getProfile()) ? true : false;
 
-        if (hasProfile) {
-            return ProfileModel.update(profileData, {where: {user_id: user.id}}).then(() => {
-                return this.getUserProfile(user.username);
-               
-            });
-        } else {
-            // const saved = await ProfileModel.create(profileData);
-            // if (saved && user.setProfile(saved)) {
-            //     return this.getUserProfile(user.username);
-            // }
-            console.log('Cannot upload picture')
-        }
-    }
 
-   
-      
+    public saveProfilePhoto = async (user: any, photo: any) => {
     
+      const profileData = {
+        profile_picture_url: "http://localhost:5000/photo/" + photo.filename,
+      };
+      console.log(photo)
+      const hasProfile: boolean = (await user.getProfile()) ? true : false;
+  
+      if (hasProfile) {
+        // update profile of user by user_id
+        let updated = await ProfileModel.update(profileData, {
+          where: { user_id: user.id },
+        });
+        if (updated) {
+          return await this.getUserProfile(user.username);
+        }
+        throw new AppError("Could not update profile picture");
+      } else {
+        // create and save profile
+        const saved = await ProfileModel.create(profileData);
+        if (saved && user.setProfile(saved)) {
+          return await this.getUserProfile(user.username);
+        }
+        throw new AppError("Could not update profile picture");
+      }
+    };
+      
+    public getPics= async (profile_picture_url: string) => {
+      const user = await ProfileModel.findOne({where: {profile_picture_url}});
+      if (user) {
+        
+          return user.profile_picture_url
+     
+      }
+    
+      return "photo not found";
+  }
 
 }

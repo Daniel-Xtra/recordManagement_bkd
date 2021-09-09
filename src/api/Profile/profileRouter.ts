@@ -20,6 +20,8 @@ router.put("/update" ,call(Profile.editProfile, (req, res, next) => [req.user, r
 // router.post("/upload", 
 //     call(Profile.saveProfilePhoto, (req, res, next) => [req.user, req.file]));
 router.post("/upload", [FrontendAssetsUpload.single("photo")],
-    call(Profile.saveProfilePhoto, (req, res,next) => [req.user, req.file.filename]));
+    call(Profile.saveProfilePhoto, (req, res,next) => [req.user, req.file]));
 
+  
+router.get("/pic/:photo", call(Profile.getPic, (req, _res, _next) => [req.params.photo]));
 export const ProfileRouter = router;

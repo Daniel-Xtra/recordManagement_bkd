@@ -13,7 +13,7 @@ router.use(authorize);
 
 router.get("/", call(User.index, (req, res, next) => []));
 
-router.get("/all",adminAuthorize, call(User.getAllUsers,(req,res,next) => [ req.query.per_page,req.query.order_next, req.query.order_prev,]));
+router.get("/all", call(User.getAllUsers,(req,res,next) => [req.params.per_page]));
 
 router.put("/update",adminAuthorize,call(User.updateUser, (req, res, next) => [req.user, req.body]));
 

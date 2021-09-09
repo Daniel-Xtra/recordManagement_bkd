@@ -9,52 +9,35 @@ import { IUser } from ".";
 
 export class UserService {
     
-    public getAllUser = async ( per_page: number) => {  
-        const limit = 2
-        const offset = (per_page - 1) * limit
-        // let users = await (<any>UserModel).paginate({
-        //     where:{
-        //         membership_type: "user"
-        //     },
-        //     limit,
-        //     offset,
-        //     desc: true,
-          
-        // })
-
-        // if (users) {
-        //     // responsible for count total orders
-        //     const totalUsers = await UserModel.count();
-        //     return {
-        //       results: users.results,
-        //       cursor: users.cursors,
-        //       totalUsers,
-        //     };
-        //   }
-        //   throw new AppError("No user found", null, 404);
-
-
-
-
-        let users =  await UserModel.findAll({
+    public getAllUser = async (per_page:number = 10) => {  
+        // const limit = 2
+        // const offset = (per_page - 1) * limit
+        const limit: number = Number(per_page);
+        let users = await (<any>UserModel).paginate({
             where:{
-                membership_type : "user"
-              
+                membership_type: "user"
             },
-            limit,
-            offset,
-            attributes:{
-            exclude:["password","email_verification_code","auth_key","refresh_token"]
-        }})
-        if (users && users.length > 0) {
-            users = await Promise.all(users.map(async (user) => {
-                user = user.toJSON();
-                return user;
-            }));
+            limit, 
+            desc: true,
+          
+        })
 
-            return users;
-        }
-          throw new AppError("No User found", null, 404);
+        if (users) {
+            // responsible for count total orders
+            // const totalUsers = await UserModel.count();
+            // return {
+            //   results: users.results,
+            //   cursor: users.cursors,
+            //   totalUsers,
+            // };
+            return(users.results)
+          }
+          throw new AppError("No user found", null, 404);
+
+
+
+
+     
     }
     
 

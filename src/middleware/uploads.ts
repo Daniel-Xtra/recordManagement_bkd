@@ -1,3 +1,4 @@
+
 import multer from "multer";
 import { mkdirP } from '../utils/helpers';
 
@@ -6,7 +7,7 @@ export const FrontendAssetsUpload = multer({
         destination:function(req, file, cb) {
             mkdirP( "public");
             mkdirP( "public/categories");
-            cb(null, "./public/categories");
+            cb(null,"./public/categories/");
         },
         filename:function(req, file, cb) {
             const fileName = file.fieldname;
@@ -15,8 +16,12 @@ export const FrontendAssetsUpload = multer({
             const extension = originalName.slice(originalName.lastIndexOf("."));
             const newFileName = `${fileName}-${fieldTime}${extension}`;
             cb(null,newFileName);
+            // const url = req.protocol + '://' + req.get("host")
+          
+          
         },
     }),
    
 });
+
 
